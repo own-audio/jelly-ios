@@ -1,8 +1,7 @@
 # CLAUDE.md — jelly-ios
 
 Open-source (MPL-2.0) native iOS music player for Jellyfin, published by own.audio. The repo
-is **private until the first release, then public** — write everything as if strangers will
-read it.
+is **public** — write everything for strangers to read.
 
 - Work phase by phase from `IMPLEMENTATION_PLAN.md`; tick phases there.
 - Every change gets a `CHANGELOG.md` entry under `[Unreleased]`.

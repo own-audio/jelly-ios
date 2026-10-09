@@ -60,8 +60,8 @@ App Store name "own.audio for Jellyfin", home screen "own.jelly". Same features 
   timer, mobile-data quality setting (transcode or original).
 - [ ] **P7: CarPlay.** Same templates as subsonic-ios.
 - [~] **P8: Release.** Done: icon (placeholder, to be rethought), App Store text, review notes
-  (Jellyfin's demo server). To do: screenshots, privacy section on own.audio, TestFlight,
-  public repository, Jellyfin's clients page. Was: iPad, Czech, large text, icon (the own.audio ring with the open-source
+  (Jellyfin's demo server). Privacy section on own.audio, first TestFlight build, public
+  repository (2026-10-09). To do: screenshots, Jellyfin's clients page. Was: iPad, Czech, large text, icon (the own.audio ring with the open-source
   mark, Jellyfin-coloured), App Store text and screenshots, privacy policy section on
   own.audio, TestFlight, public repository, listing on Jellyfin's clients page.
 
