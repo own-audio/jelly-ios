@@ -54,6 +54,9 @@ All notable changes to this project are documented here. The format follows
 
 ### Fixed
 
+- Playlists imported from .m3u files were missing: the list asked the server for audio
+  playlists only, and Jellyfin gives imported ones the media type "Unknown". Now every
+  playlist but video ones is listed.
 - An account with no password (Jellyfin allows them; the public demo has one) couldn't sign in:
   the form wanted a password.
 - An address typed without http:// or https:// was tried only as http on port 8096, so a

@@ -164,6 +164,19 @@ struct JellyfinClientTests {
         #expect(log[2].httpMethod == "DELETE")
     }
 
+    @Test("playlists: imported ones (media type Unknown) are listed, video ones are not")
+    func playlistsKeepUnknownMediaType() async throws {
+        let mock = await MockURLProtocol.makeStubbedSession { _ in
+            .init(statusCode: 200, body: Self.json(#"""
+            {"Items":[{"Id":"p1","Name":"From m3u","ChildCount":17,"MediaType":"Unknown"},
+            {"Id":"p2","Name":"Made here","ChildCount":3,"MediaType":"Audio"},
+            {"Id":"p3","Name":"Films","ChildCount":2,"MediaType":"Video"}]}
+            """#))
+        }
+        #expect(try await client(mock).playlists().map(\.name) == ["From m3u", "Made here"])
+        #expect(await mock.firstQuery().contains { $0.name == "MediaTypes" } == false)
+    }
+
     @Test("the stream URL is the original file, with the token for the player")
     func streamURL() {
         let api = JellyfinClient(host: host, session: session, clientInfo: info)

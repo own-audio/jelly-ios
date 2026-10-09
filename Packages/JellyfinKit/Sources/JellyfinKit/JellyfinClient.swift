@@ -328,12 +328,14 @@ public struct JellyfinClient: Sendable {
 
     // MARK: - Playlists
 
+    /// Every playlist but video ones. Not filtered to audio on the server: playlists imported
+    /// from .m3u files come with media type "Unknown", and those would be left out.
     public func playlists() async throws -> [Playlist] {
         let response: ItemsResponse = try await get("Items", query: [
             "userId": session.userId, "IncludeItemTypes": "Playlist", "Recursive": "true",
-            "SortBy": "SortName", "Fields": "ChildCount", "MediaTypes": "Audio",
+            "SortBy": "SortName", "Fields": "ChildCount",
         ])
-        return response.items.map(\.asPlaylist)
+        return response.items.filter { $0.mediaType != "Video" }.map(\.asPlaylist)
     }
 
     public func playlist(id: String) async throws -> (playlist: Playlist, songs: [Song]) {

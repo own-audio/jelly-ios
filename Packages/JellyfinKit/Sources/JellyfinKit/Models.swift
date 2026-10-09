@@ -273,6 +273,7 @@ struct ItemDTO: Decodable {
     let playlistItemId: String?
     let dateCreated: Date?
     let collectionType: String?
+    let mediaType: String?
 
     enum CodingKeys: String, CodingKey {
         case id = "Id", name = "Name", type = "Type", album = "Album", albumId = "AlbumId"
@@ -284,7 +285,7 @@ struct ItemDTO: Decodable {
         case songCount = "SongCount", userData = "UserData", container = "Container"
         case mediaSources = "MediaSources", normalizationGain = "NormalizationGain"
         case hasLyrics = "HasLyrics", playlistItemId = "PlaylistItemId"
-        case dateCreated = "DateCreated", collectionType = "CollectionType"
+        case dateCreated = "DateCreated", collectionType = "CollectionType", mediaType = "MediaType"
     }
 
     /// Libraries with sloppy tags send names made of spaces; those count as no name.
