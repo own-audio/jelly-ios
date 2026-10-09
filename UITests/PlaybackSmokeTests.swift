@@ -75,6 +75,32 @@ final class PlaybackSmokeTests: XCTestCase {
         XCTAssertTrue(waitUntil(timeout: 5) { playPause.exists && playPause.label == "Play" }, "pause should pause")
     }
 
+    /// On mobile data with 128 kbps chosen, the server makes an MP3 on the fly; it has to play
+    /// like the original does.
+    func testSmallerStreamOnMobileDataPlays() throws {
+        let app = XCUIApplication()
+        app.launchArguments = ["-uiTestReset", "-simulateMobileData", "-mobileBitrate", "128000"] + Self.english
+        app.launch()
+        addServer(app, screenshots: false)
+        openAlbum(app, named: env["JELLYFIN_ALBUM"], screenshots: false)
+        let play = app.buttons["detail.play"]
+        XCTAssertTrue(play.waitForExistence(timeout: 20))
+        XCTAssertTrue(waitUntil(timeout: 20) { play.isEnabled })
+        play.tap()
+        let miniPlayPause = app.buttons["miniPlayer.playPause"]
+        XCTAssertTrue(
+            waitUntil(timeout: 30) { miniPlayPause.exists && miniPlayPause.label == "Pause" },
+            "the transcoded stream should start"
+        )
+        app.buttons["miniPlayer"].tap()
+        let scrubber = app.descendants(matching: .any)["player.scrubber"].firstMatch
+        XCTAssertTrue(scrubber.waitForExistence(timeout: 10))
+        let first = scrubber.value as? String ?? ""
+        sleep(4)
+        XCTAssertNotEqual(scrubber.value as? String ?? "", first, "the transcoded stream should keep playing")
+        screenshot(app, "16-mobile-data-player")
+    }
+
     /// Download an album, then start the app with every server unreachable and play it from
     /// Downloads. `TEST_RUNNER_JELLYFIN_DOWNLOAD_ALBUM` picks a small album; without it, the
     /// first one.

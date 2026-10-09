@@ -207,7 +207,7 @@ final class DownloadManager {
             pump()
         }
         do {
-            let url = try await registry.streamURL(trackId: item.trackId)
+            let url = try await registry.downloadURL(trackId: item.trackId)
             let (temp, response) = try await session.download(from: url)
             guard let http = response as? HTTPURLResponse, (200..<300).contains(http.statusCode) else {
                 try? FileManager.default.removeItem(at: temp)

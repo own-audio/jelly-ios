@@ -67,6 +67,23 @@ final class AppModel {
         engine.requiresLocalFiles = isOffline
     }
 
+    /// Bits per second to stream at on mobile data; nil streams the original file. Downloads are
+    /// always the original.
+    var mobileBitrate: Int? {
+        didSet {
+            UserDefaults.standard.set(mobileBitrate ?? 0, forKey: Self.mobileBitrateKey)
+            applyStreamQuality()
+        }
+    }
+
+    static let mobileBitrateChoices: [Int?] = [nil, 320_000, 192_000, 128_000]
+
+    private func applyStreamQuality() {
+        let bitrate = network.isExpensive || Self.isSimulatingMobileData ? mobileBitrate : nil
+        let registry = registry
+        Task { await registry.setMaxBitrate(bitrate) }
+    }
+
     /// Report playback to the server: what is playing (shown on its dashboard), and plays.
     var scrobblingEnabled: Bool {
         didSet { UserDefaults.standard.set(scrobblingEnabled, forKey: Self.scrobblingKey) }
@@ -81,6 +98,7 @@ final class AppModel {
     private static let scrobblingKey = "scrobblingEnabled"
     private static let downloadedOnlyKey = "downloadedOnly"
     private static let deviceIdKey = "deviceId"
+    private static let mobileBitrateKey = "mobileBitrate"
 
     /// How this app shows up in the server's list of devices. The id is made once and kept, so
     /// a reinstall is one device, not a new one each launch.
@@ -99,6 +117,14 @@ final class AppModel {
     private static var isSimulatingOffline: Bool {
         #if DEBUG
         ProcessInfo.processInfo.arguments.contains("-simulateOffline")
+        #else
+        false
+        #endif
+    }
+    /// UI tests check the smaller stream by starting the app as if on mobile data.
+    private static var isSimulatingMobileData: Bool {
+        #if DEBUG
+        ProcessInfo.processInfo.arguments.contains("-simulateMobileData")
         #else
         false
         #endif
@@ -140,10 +166,14 @@ final class AppModel {
         }
         scrobblingEnabled = UserDefaults.standard.object(forKey: Self.scrobblingKey) as? Bool ?? true
         downloadedOnly = UserDefaults.standard.bool(forKey: Self.downloadedOnlyKey)
+        let savedBitrate = UserDefaults.standard.integer(forKey: Self.mobileBitrateKey)
+        mobileBitrate = savedBitrate > 0 ? savedBitrate : nil
         applyOfflineState()
+        applyStreamQuality()
         network.onChange = { [weak self] connected in
             guard let self else { return }
             self.applyOfflineState()
+            self.applyStreamQuality()
             if connected { Task { await self.flushPendingScrobbles() } }
         }
         wireScrobbling()

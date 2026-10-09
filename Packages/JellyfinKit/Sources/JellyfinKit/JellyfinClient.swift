@@ -406,11 +406,25 @@ public struct JellyfinClient: Sendable {
 
     // MARK: - URLs for the player and image loading
 
-    /// The original file. The token goes in the query because the player fetches the URL as is.
-    public func streamURL(songId: String) -> URL {
-        var url = host.appending(path: "Audio/\(songId)/stream")
+    /// The original file, or with `maxBitrate` (bits per second) an MP3 the server makes on the
+    /// fly at that rate, to save mobile data. The token goes in the query because the player
+    /// fetches the URL as is.
+    public func streamURL(songId: String, maxBitrate: Int? = nil) -> URL {
+        guard let maxBitrate else {
+            var url = host.appending(path: "Audio/\(songId)/stream")
+            url.append(queryItems: [
+                URLQueryItem(name: "static", value: "true"),
+                URLQueryItem(name: "ApiKey", value: session.accessToken),
+            ])
+            return url
+        }
+        // MP3 because the player decodes it in pieces as it arrives, and every server's ffmpeg
+        // can make it.
+        var url = host.appending(path: "Audio/\(songId)/stream.mp3")
         url.append(queryItems: [
-            URLQueryItem(name: "static", value: "true"),
+            URLQueryItem(name: "static", value: "false"),
+            URLQueryItem(name: "audioCodec", value: "mp3"),
+            URLQueryItem(name: "audioBitRate", value: String(maxBitrate)),
             URLQueryItem(name: "ApiKey", value: session.accessToken),
         ])
         return url

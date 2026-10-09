@@ -56,7 +56,7 @@ App Store name "own.audio for Jellyfin", home screen "own.jelly". Same features 
 - [x] **P5: Downloads and offline mode.** As in subsonic-ios: downloads per song, album and
   playlist; offline mode with the library from the downloads and saved server answers; UI
   test for a partly downloaded album.
-- [ ] **P6: Extras.** Lyrics, volume leveling from `NormalizationGain`, EQ, crossfade, sleep
+- [x] **P6: Extras.** Lyrics, volume leveling from `NormalizationGain`, EQ, crossfade, sleep
   timer, mobile-data quality setting (transcode or original).
 - [ ] **P7: CarPlay.** Same templates as subsonic-ios.
 - [ ] **P8: Release.** iPad, Czech, large text, icon (the own.audio ring with the open-source

@@ -162,6 +162,10 @@ struct JellyfinClientTests {
         #expect(url.path == "/Audio/s1/stream")
         #expect(url.query?.contains("static=true") == true)
         #expect(url.query?.contains("ApiKey=tok") == true)
+        let smaller = api.streamURL(songId: "s1", maxBitrate: 128_000)
+        #expect(smaller.path == "/Audio/s1/stream.mp3")
+        #expect(smaller.query?.contains("audioBitRate=128000") == true)
+        #expect(smaller.query?.contains("static=false") == true)
     }
 
     // MARK: - Offline

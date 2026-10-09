@@ -119,6 +119,10 @@ struct LiveServerTests {
         let http = try #require(streamResponse as? HTTPURLResponse)
         #expect([200, 206].contains(http.statusCode))
         #expect(http.mimeType?.hasPrefix("audio/") == true)
+        let (smaller, smallerResponse) = try await URLSession.shared.data(from: api.streamURL(songId: song.id, maxBitrate: 128_000))
+        #expect((smallerResponse as? HTTPURLResponse)?.mimeType == "audio/mpeg")
+        // About a minute of 128 kbps or more; a transcode that failed would be an error page.
+        #expect(smaller.count > 100_000)
         let cover = try #require(song.coverArt)
         let (_, imageResponse) = try await URLSession.shared.data(from: api.imageURL(itemId: cover, size: 200))
         #expect((imageResponse as? HTTPURLResponse)?.mimeType?.hasPrefix("image/") == true)

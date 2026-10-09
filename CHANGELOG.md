@@ -22,6 +22,9 @@ All notable changes to this project are documented here. The format follows
 - Playback reporting: start, progress every 15 seconds and stop go to the server, so the
   dashboard shows what is playing and Jellyfin counts plays by its own rules. Plays made
   offline are sent afterwards as played at the time they were heard.
+- Smaller streams on mobile data (Settings → Streaming → On Mobile Data: original, 320, 192 or
+  128 kbps): the server makes an MP3 as the song plays. Wi-Fi and downloads stay original. A UI
+  test plays a 128 kbps stream (`-simulateMobileData` in debug builds).
 - Volume leveling from the server's measured loudness (`NormalizationGain`).
 - Albums whose tags have no name (or only spaces) show as "Unknown Album".
 - UI tests from own.audio for Subsonic, pointed at a Jellyfin server; `scripts/test-servers.sh`

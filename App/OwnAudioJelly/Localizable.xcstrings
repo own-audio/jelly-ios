@@ -61,6 +61,16 @@
         }
       }
     },
+    "%lld kbps" : {
+      "localizations" : {
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld kb/s"
+          }
+        }
+      }
+    },
     "%lld of %lld downloaded" : {
       "localizations" : {
         "cs" : {
@@ -1118,6 +1128,36 @@
         }
       }
     },
+    "On Mobile Data" : {
+      "localizations" : {
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Na mobilních datech"
+          }
+        }
+      }
+    },
+    "On mobile data the server can make a smaller MP3 of each song as it plays. On Wi-Fi, and for downloads, it's always the original file." : {
+      "localizations" : {
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Na mobilních datech může server při přehrávání vytvářet z každé skladby menší MP3. Na Wi-Fi a při stahování je to vždy původní soubor."
+          }
+        }
+      }
+    },
+    "Original" : {
+      "localizations" : {
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Původní"
+          }
+        }
+      }
+    },
     "Quick Connect" : {
       "localizations" : {
         "cs" : {
@@ -1214,6 +1254,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Přihlásit přes Quick Connect"
+          }
+        }
+      }
+    },
+    "Streaming" : {
+      "localizations" : {
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Streamování"
           }
         }
       }

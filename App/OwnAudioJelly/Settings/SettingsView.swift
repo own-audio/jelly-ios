@@ -43,6 +43,22 @@ struct SettingsView: View {
                 Text("Shows and plays only what is on this iPhone, as it does on its own with no network. Saves mobile data.")
             }
 
+            Section {
+                Picker("On Mobile Data", selection: Binding(
+                    get: { model.mobileBitrate },
+                    set: { model.mobileBitrate = $0 }
+                )) {
+                    ForEach(AppModel.mobileBitrateChoices, id: \.self) { bitrate in
+                        Text(bitrate.map { String(localized: "\($0 / 1000) kbps") } ?? String(localized: "Original")).tag(bitrate)
+                    }
+                }
+                .accessibilityIdentifier("settings.mobileBitrate")
+            } header: {
+                Text("Streaming")
+            } footer: {
+                Text("On mobile data the server can make a smaller MP3 of each song as it plays. On Wi-Fi, and for downloads, it's always the original file.")
+            }
+
             CrossfadeSettings(settings: model.playbackSettings)
 
             ReplayGainSettings(settings: model.playbackSettings)
