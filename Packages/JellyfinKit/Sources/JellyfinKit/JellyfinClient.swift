@@ -80,6 +80,22 @@ public struct JellyfinClient: Sendable {
         return components.url
     }
 
+    /// The addresses to try for what was typed. With a scheme, just that. Without one, https
+    /// first (a server behind a proxy or on a public name), then http on Jellyfin's port 8096
+    /// (a server at home), then plain http.
+    public static func candidateHosts(_ rawInput: String) -> [URL] {
+        let trimmed = rawInput.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmed.hasPrefix("http://") || trimmed.hasPrefix("https://") {
+            return normalizeHost(trimmed).map { [$0] } ?? []
+        }
+        guard let home = normalizeHost(trimmed) else { return [] }
+        var candidates: [URL] = []
+        if let secure = normalizeHost("https://\(trimmed)") { candidates.append(secure) }
+        candidates.append(home)
+        if let plain = normalizeHost("http://\(trimmed)"), plain != home { candidates.append(plain) }
+        return candidates
+    }
+
     // MARK: - Before signing in
 
     /// Name and version, without signing in; also tells whether there is a Jellyfin there at all.

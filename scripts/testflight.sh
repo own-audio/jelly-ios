@@ -10,7 +10,7 @@ cd "$(dirname "$0")/.."
 source ./release.local.env
 
 BUILD=$(git rev-list --count HEAD)
-OUT="${RELEASE_OUTPUT:-/tmp/subsonic-ios-release}"
+OUT="${RELEASE_OUTPUT:-/tmp/jelly-ios-release}"
 mkdir -p "$OUT"
 cat > "$OUT/upload.plist" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>

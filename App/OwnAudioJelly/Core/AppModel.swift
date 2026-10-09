@@ -235,17 +235,30 @@ final class AppModel {
         try await save(host: host, info: info, session: session, name: name)
     }
 
-    /// The server at `address`, and that it is a Jellyfin at all.
+    /// The server at `address`, and that it is a Jellyfin at all. Without a scheme, each likely
+    /// address is tried in turn.
     func findServer(_ address: String) async throws -> (URL, ServerInfo) {
-        guard let host = JellyfinClient.normalizeHost(address) else { throw AddServerError.invalidAddress }
-        do {
-            return (host, try await JellyfinClient.serverInfo(host: host, urlSession: Self.session))
-        } catch JellyfinClient.JellyfinError.network {
-            throw AddServerError.unreachable
-        } catch {
-            throw AddServerError.notJellyfin
+        let candidates = JellyfinClient.candidateHosts(address)
+        guard !candidates.isEmpty else { throw AddServerError.invalidAddress }
+        var answeredButNotJellyfin = false
+        for host in candidates {
+            do {
+                return (host, try await JellyfinClient.serverInfo(host: host, urlSession: Self.quickSession))
+            } catch JellyfinClient.JellyfinError.network {
+                continue
+            } catch {
+                answeredButNotJellyfin = true
+            }
         }
+        throw answeredButNotJellyfin ? AddServerError.notJellyfin : AddServerError.unreachable
     }
+
+    /// For trying addresses: a wrong guess shouldn't hold the next one up for long.
+    private static let quickSession: URLSession = {
+        let configuration = URLSessionConfiguration.default
+        configuration.timeoutIntervalForRequest = 6
+        return URLSession(configuration: configuration)
+    }()
 
     /// Saves a signed-in server and makes it the one shown.
     func save(host: URL, info: ServerInfo, session: Session, name: String) async throws {
@@ -387,7 +400,7 @@ final class AppModel {
     private var reportedLive: Set<String> = []
 
     private func reportSession(_ event: SessionEvent, trackId: String, position: Double) async {
-        guard let (client, songId) = await resolve(trackId) else { return }
+        guard scrobblingEnabled, let (client, songId) = await resolve(trackId) else { return }
         do {
             switch event {
             case .start:

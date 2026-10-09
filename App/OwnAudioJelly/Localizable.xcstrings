@@ -1378,22 +1378,22 @@
         }
       }
     },
-    "Without http:// or https://, http and port 8096 are used, which suits a server at home." : {
+    "Without http:// or https://, the app tries https, then http on port 8096, which suits a server at home." : {
       "localizations" : {
         "cs" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bez http:// nebo https:// se použije http a port 8096, což se hodí pro server doma."
+            "value" : "Bez http:// nebo https:// aplikace zkusí https a pak http na portu 8096, což se hodí pro server doma."
           }
         }
       }
     },
-    "Without http:// or https://, http and port 8096 are used. The password is used once to sign in and isn't stored; the app keeps the sign-in the server gives it, in this phone's Keychain." : {
+    "Without http:// or https://, the app tries https, then http on port 8096. The password is used once to sign in and isn't stored; the app keeps the sign-in the server gives it, in this phone's Keychain." : {
       "localizations" : {
         "cs" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bez http:// nebo https:// se použije http a port 8096. Heslo poslouží jen k přihlášení a neukládá se; aplikace si v klíčence telefonu uloží přihlášení, které jí server vydá."
+            "value" : "Bez http:// nebo https:// aplikace zkusí https a pak http na portu 8096. Heslo poslouží jen k přihlášení a neukládá se; aplikace si v klíčence telefonu uloží přihlášení, které jí server vydá."
           }
         }
       }

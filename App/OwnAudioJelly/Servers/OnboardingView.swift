@@ -14,8 +14,9 @@ struct OnboardingView: View {
 
     private enum Field { case address, username, password, name }
 
+    /// Jellyfin allows accounts with no password, so an empty one is fine.
     private var canConnect: Bool {
-        !address.trimmingCharacters(in: .whitespaces).isEmpty && !username.isEmpty && !password.isEmpty && !isConnecting
+        !address.trimmingCharacters(in: .whitespaces).isEmpty && !username.isEmpty && !isConnecting
     }
 
     var body: some View {
@@ -152,7 +153,7 @@ struct OnboardingView: View {
     private var notes: some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.md) {
             note("checkmark.shield", "Your password is used once to sign in and isn't stored. The app keeps the sign-in Jellyfin gives it, in this iPhone's Keychain.")
-            note("network", "Without http:// or https://, http and port 8096 are used, which suits a server at home.")
+            note("network", "Without http:// or https://, the app tries https, then http on port 8096, which suits a server at home.")
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }

@@ -17,8 +17,9 @@ struct AddServerView: View {
 
     private enum Field { case address, username, password, name }
 
+    /// Jellyfin allows accounts with no password, so an empty one is fine.
     private var canConnect: Bool {
-        !address.trimmingCharacters(in: .whitespaces).isEmpty && !username.isEmpty && !password.isEmpty && !isConnecting
+        !address.trimmingCharacters(in: .whitespaces).isEmpty && !username.isEmpty && !isConnecting
     }
 
     var body: some View {
@@ -48,7 +49,7 @@ struct AddServerView: View {
                     .onSubmit { if canConnect { connect() } }
                     .accessibilityIdentifier("addServer.password")
             } footer: {
-                Text("Without http:// or https://, http and port 8096 are used. The password is used once to sign in and isn't stored; the app keeps the sign-in the server gives it, in this phone's Keychain.")
+                Text("Without http:// or https://, the app tries https, then http on port 8096. The password is used once to sign in and isn't stored; the app keeps the sign-in the server gives it, in this phone's Keychain.")
             }
 
             Section {

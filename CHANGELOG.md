@@ -15,6 +15,10 @@ All notable changes to this project are documented here. The format follows
   timer, downloads and offline mode, CarPlay, Czech. The player is player-engine 0.1.0.
 - Favorites (a heart, as in Jellyfin) instead of stars; no ratings, which Jellyfin doesn't
   have.
+- App icon: the own.audio construction in Jellyfin's purple-to-blue (a placeholder; both
+  players' icons are to be rethought so they aren't confused).
+- App Store listing text in English and Czech (`AppStore/`), with review notes pointing at
+  Jellyfin's public demo server.
 - Sign in with Quick Connect: the app shows a code to approve in another Jellyfin app, no
   password typed. A server with several music libraries can show one or all (Settings →
   Servers → Music Library…).
@@ -47,3 +51,13 @@ All notable changes to this project are documented here. The format follows
   stream and covers, a 128 kbps stream, lyrics, reporting and sign-out, Quick Connect approved
   by a signed-in session). A playlist renamed straight after songs were added to it can keep
   its old name: the server writes the edit out in the background.
+
+### Fixed
+
+- An account with no password (Jellyfin allows them; the public demo has one) couldn't sign in:
+  the form wanted a password.
+- An address typed without http:// or https:// was tried only as http on port 8096, so a
+  server behind https on a public name wasn't found. Now https is tried first, then http on
+  8096, then plain http, a few seconds each.
+- Turning off playback reporting stopped new reports but not the progress reports of a song
+  already playing.

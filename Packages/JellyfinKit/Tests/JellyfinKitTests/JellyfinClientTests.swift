@@ -26,6 +26,15 @@ struct JellyfinClientTests {
         #expect(JellyfinClient.normalizeHost("  ") == nil)
     }
 
+    @Test("without a scheme, https comes first, then http on 8096, then plain http")
+    func candidateHosts() {
+        #expect(JellyfinClient.candidateHosts("demo.jellyfin.org/stable").map(\.absoluteString) == [
+            "https://demo.jellyfin.org/stable", "http://demo.jellyfin.org:8096/stable", "http://demo.jellyfin.org/stable",
+        ])
+        #expect(JellyfinClient.candidateHosts("nas.local:9000").map(\.absoluteString) == ["https://nas.local:9000", "http://nas.local:9000"])
+        #expect(JellyfinClient.candidateHosts("http://nas.local").map(\.absoluteString) == ["http://nas.local"])
+    }
+
     @Test("every request carries the MediaBrowser header with the token")
     func authorizationHeader() async throws {
         let mock = await MockURLProtocol.makeStubbedSession { _ in .init(statusCode: 200, body: Self.json(#"{"Items":[]}"#)) }
