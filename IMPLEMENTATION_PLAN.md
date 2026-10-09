@@ -33,10 +33,13 @@ App Store name "own.audio for Jellyfin", home screen "own.jelly". Same features 
 
 ## Phases
 
-- [ ] **P0: Shared engine.** Create `own-audio/player-engine` from subsonic-ios's
+- [~] **P0: Shared engine.** Create `own-audio/player-engine` from subsonic-ios's
   `Packages/PlayerEngine` with its history, tag 0.1.0, switch subsonic-ios to it and check its
   tests and UI tests still pass. XcodeGen skeleton for this app; launches on the simulator.
-- [ ] **P1: JellyfinKit.** Auth (`AuthenticateByName`, Quick Connect, the
+  Engine part done 2026-10-09: 0.1.0 with products `MusicEngine` and `PlayerCore`; subsonic-ios
+  uses it and passes all its tests on both servers. The skeleton is still to do.
+- [x] **P1: JellyfinKit.** 12 stubbed tests, 8 live tests passing against Jellyfin 12.2
+  (2026-10-09). Auth (`AuthenticateByName`, Quick Connect, the
   `Authorization: MediaBrowser …` header with a stable device id), public server info, user
   views, album artists, albums (sorts: name, artist, date added, played, random, favorites),
   album and playlist items, songs (paged), genres, search, favorites, playlists (create,
