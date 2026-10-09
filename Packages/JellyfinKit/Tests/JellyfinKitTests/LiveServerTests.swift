@@ -93,14 +93,17 @@ struct LiveServerTests {
         let id = try await api.createPlaylist(name: "own.jelly test", songIds: [songs[0].id])
         do {
             try await api.addToPlaylist(id: id, songIds: [songs[1].id, songs[2].id])
-            try await api.renamePlaylist(id: id, to: "own.jelly test renamed")
             var loaded = try await api.playlist(id: id)
             #expect(loaded.songs.map(\.id) == songs.map(\.id))
-            #expect(loaded.playlist.name == "own.jelly test renamed")
             let entry = try #require(loaded.songs[1].playlistItemId)
             try await api.removeFromPlaylist(id: id, entryIds: [entry])
             loaded = try await api.playlist(id: id)
             #expect(loaded.songs.map(\.id) == [songs[0].id, songs[2].id])
+            // Last: the server writes an edited playlist out in the background, and a rename
+            // straight after adding songs can be overwritten by that write.
+            try await Task.sleep(for: .seconds(1))
+            try await api.renamePlaylist(id: id, to: "own.jelly test renamed")
+            #expect(try await api.playlist(id: id).playlist.name == "own.jelly test renamed")
         } catch {
             try? await api.deletePlaylist(id: id)
             throw error
@@ -133,6 +136,29 @@ struct LiveServerTests {
         let api = try await client()
         let song = try #require(try await api.songs(limit: 1).first)
         _ = try await api.lyrics(songId: song.id)
+    }
+
+    @Test("Quick Connect: a code approved by a signed-in session gives this device its own session")
+    func quickConnect() async throws {
+        let env = try #require(LiveServerConfig.current)
+        guard await JellyfinClient.isQuickConnectEnabled(host: env.host) else { return }
+        let device = ClientInfo(client: "own.jelly tests", device: "swift test", deviceId: "own-jelly-quick-connect-test", version: "0")
+        let request = try await JellyfinClient.startQuickConnect(host: env.host, clientInfo: device)
+        #expect(!request.isApproved)
+        // What the listener does in another Jellyfin app: approve the code while signed in.
+        let approver = try await client()
+        var approve = URLRequest(url: env.host.appending(path: "QuickConnect/Authorize").appending(queryItems: [
+            URLQueryItem(name: "code", value: request.code),
+        ]))
+        approve.httpMethod = "POST"
+        approve.setValue(Self.info.header(token: approver.session.accessToken), forHTTPHeaderField: "Authorization")
+        let (_, response) = try await URLSession.shared.data(for: approve)
+        #expect((response as? HTTPURLResponse)?.statusCode == 200)
+        #expect(try await JellyfinClient.checkQuickConnect(host: env.host, secret: request.secret).isApproved)
+        let session = try await JellyfinClient.finishQuickConnect(host: env.host, secret: request.secret, clientInfo: device)
+        let api = JellyfinClient(host: env.host, session: session, clientInfo: device)
+        #expect(await api.checkSession() == .ok)
+        await api.signOut()
     }
 
     @Test("playback reporting is accepted; the session ends cleanly")

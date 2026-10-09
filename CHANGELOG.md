@@ -42,6 +42,8 @@ All notable changes to this project are documented here. The format follows
   back when the network fails or the app is offline (`OfflineSwitch`); writes are refused
   offline with `.offline`.
 - `ServerStore`: signed-in servers in one Keychain item, with the chosen library.
-- Tests: 12 stubbed client tests; 8 live tests against a real Jellyfin 12.2 server (sign-in,
+- Tests: stubbed client tests; live tests against a real Jellyfin 12.2 server (sign-in,
   browsing, paging, search, instant mix, a favorite and a playlist put back as they were,
-  stream and covers, lyrics, reporting and sign-out).
+  stream and covers, a 128 kbps stream, lyrics, reporting and sign-out, Quick Connect approved
+  by a signed-in session). A playlist renamed straight after songs were added to it can keep
+  its old name: the server writes the edit out in the background.
