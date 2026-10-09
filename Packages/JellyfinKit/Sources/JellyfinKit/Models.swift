@@ -287,12 +287,15 @@ struct ItemDTO: Decodable {
         case dateCreated = "DateCreated", collectionType = "CollectionType"
     }
 
+    /// Libraries with sloppy tags send names made of spaces; those count as no name.
+    var trimmedName: String { (name ?? "").trimmingCharacters(in: .whitespacesAndNewlines) }
+
     /// 100-nanosecond ticks to whole seconds.
     var seconds: Int? { runTimeTicks.map { Int(($0 + 5_000_000) / 10_000_000) } }
 
     var asArtist: Artist {
         Artist(
-            id: id, name: name ?? "", albumCount: albumCount ?? childCount,
+            id: id, name: trimmedName, albumCount: albumCount ?? childCount,
             imageId: imageTags?.primary != nil ? id : nil, isFavorite: userData?.isFavorite ?? false
         )
     }
@@ -300,7 +303,7 @@ struct ItemDTO: Decodable {
     var asAlbum: Album {
         let artist = albumArtists?.first ?? artistItems?.first
         return Album(
-            id: id, name: name ?? "", artist: albumArtist ?? artist?.name, artistId: artist?.id,
+            id: id, name: trimmedName, artist: albumArtist ?? artist?.name, artistId: artist?.id,
             songCount: childCount ?? songCount ?? 0, duration: seconds,
             coverArt: imageTags?.primary != nil ? id : nil, year: productionYear,
             genre: genres?.first, isFavorite: userData?.isFavorite ?? false,
@@ -314,7 +317,7 @@ struct ItemDTO: Decodable {
         // The disc number is 0 on files without a disc tag; that isn't a real disc.
         let disc = parentIndexNumber.flatMap { $0 > 0 ? $0 : nil }
         return Song(
-            id: id, title: name ?? "", album: album, artist: artistItems?.first?.name ?? albumArtist,
+            id: id, title: trimmedName, album: album, artist: artistItems?.first?.name ?? albumArtist,
             albumId: albumId, artistId: artistItems?.first?.id ?? albumArtists?.first?.id,
             track: indexNumber, discNumber: disc, duration: seconds, genre: genres?.first,
             coverArt: cover, suffix: container ?? source?.container, bitRate: source?.bitrate,
@@ -326,7 +329,7 @@ struct ItemDTO: Decodable {
 
     var asPlaylist: Playlist {
         Playlist(
-            id: id, name: name ?? "", songCount: childCount ?? 0, duration: seconds,
+            id: id, name: trimmedName, songCount: childCount ?? 0, duration: seconds,
             coverArt: imageTags?.primary != nil ? id : nil
         )
     }

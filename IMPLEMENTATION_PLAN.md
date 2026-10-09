@@ -33,11 +33,11 @@ App Store name "own.audio for Jellyfin", home screen "own.jelly". Same features 
 
 ## Phases
 
-- [~] **P0: Shared engine.** Create `own-audio/player-engine` from subsonic-ios's
+- [x] **P0: Shared engine.** Create `own-audio/player-engine` from subsonic-ios's
   `Packages/PlayerEngine` with its history, tag 0.1.0, switch subsonic-ios to it and check its
   tests and UI tests still pass. XcodeGen skeleton for this app; launches on the simulator.
   Engine part done 2026-10-09: 0.1.0 with products `MusicEngine` and `PlayerCore`; subsonic-ios
-  uses it and passes all its tests on both servers. The skeleton is still to do.
+  uses it and passes all its tests on both servers. App skeleton done the same day.
 - [x] **P1: JellyfinKit.** 12 stubbed tests, 8 live tests passing against Jellyfin 12.2
   (2026-10-09). Auth (`AuthenticateByName`, Quick Connect, the
   `Authorization: MediaBrowser …` header with a stable device id), public server info, user
@@ -45,14 +45,15 @@ App Store name "own.audio for Jellyfin", home screen "own.jelly". Same features 
   album and playlist items, songs (paged), genres, search, favorites, playlists (create,
   rename, add, remove, delete), lyrics, instant mix, stream and image URLs. Stubbed tests plus
   live tests gated on `JELLYFIN_HOST/USER/PASSWORD`.
-- [ ] **P2: Servers.** Add (address, user, password or Quick Connect), check, rename, remove,
+- [x] **P2: Servers.** Add (address, user, password or Quick Connect), check, rename, remove,
   several at once; library picker when a server has more than one music library.
-- [ ] **P3: Library and player.** The subsonic-ios screens on JellyfinKit: Home, Library
+- [x] **P3: Library and player.** All five UI tests from subsonic-ios pass against Jellyfin
+  12.2 (2026-10-09). The subsonic-ios screens on JellyfinKit: Home, Library
   (Artists, Albums, Songs, Genres, Favorites), Playlists, Search in the tab bar; mini and full
   player, queue, AirPlay; UI smoke test.
-- [ ] **P4: Server features.** Favorites, playlist editing, playback reporting with an
+- [x] **P4: Server features.** Favorites, playlist editing, playback reporting with an
   offline queue, instant mix from a song, album or artist.
-- [ ] **P5: Downloads and offline mode.** As in subsonic-ios: downloads per song, album and
+- [x] **P5: Downloads and offline mode.** As in subsonic-ios: downloads per song, album and
   playlist; offline mode with the library from the downloads and saved server answers; UI
   test for a partly downloaded album.
 - [ ] **P6: Extras.** Lyrics, volume leveling from `NormalizationGain`, EQ, crossfade, sleep

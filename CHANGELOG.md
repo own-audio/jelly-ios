@@ -8,6 +8,24 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- The app, built from own.audio for Subsonic's screens on JellyfinKit: welcome screen and
+  sign-in, Home (Shuffle All, Recently Played, Recently Added, Playlists), Library (Artists,
+  Albums in seven orders, Songs, Genres, Favorites, Downloads), Playlists with editing,
+  Search in the tab bar, mini and full player with queue, lyrics, equalizer, crossfade, sleep
+  timer, downloads and offline mode, CarPlay, Czech. The player is player-engine 0.1.0.
+- Favorites (a heart, as in Jellyfin) instead of stars; no ratings, which Jellyfin doesn't
+  have.
+- Sign in with Quick Connect: the app shows a code to approve in another Jellyfin app, no
+  password typed. A server with several music libraries can show one or all (Settings →
+  Servers → Music Library…).
+- Instant Mix from a song's menu, an album's menu and an artist's toolbar.
+- Playback reporting: start, progress every 15 seconds and stop go to the server, so the
+  dashboard shows what is playing and Jellyfin counts plays by its own rules. Plays made
+  offline are sent afterwards as played at the time they were heard.
+- Volume leveling from the server's measured loudness (`NormalizationGain`).
+- Albums whose tags have no name (or only spaces) show as "Unknown Album".
+- UI tests from own.audio for Subsonic, pointed at a Jellyfin server; `scripts/test-servers.sh`
+  runs them with the live client tests.
 - Implementation plan: feature parity with own.audio for Subsonic, on a hand-written
   Jellyfin client and the shared player-engine package.
 - `JellyfinKit`: sign-in by name and password or Quick Connect (the token is kept, never the
