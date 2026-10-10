@@ -1,5 +1,7 @@
 # own.audio for Jellyfin
 
+> **Moved.** This project is now part of [own.audio Music](https://github.com/own-audio/music-ios), one open-source player for own.audio, Subsonic/Navidrome and Jellyfin servers. Its history is kept there; this repository is archived.
+
 A native iPhone and iPad music player for [Jellyfin](https://jellyfin.org). Swift and SwiftUI,
 no web views. In development; the plan is in [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md).
 
